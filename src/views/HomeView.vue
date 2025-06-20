@@ -101,14 +101,17 @@ const deleteTodo = async (todo) => {
           <img src="../assets/cycle.png" alt="./assets/cycle.png" />
           <div class="dash-info">
             <p>On going</p>
-            <span>{{ activeTodos?.length }} {{ todoList?.length > 1 ? 'tasks' : 'task' }}</span>
+            <span>{{ activeTodos?.length }} {{ activeTodos?.length > 1 ? 'tasks' : 'task' }}</span>
           </div>
         </div>
         <div class="dashboard two">
           <img src="../assets/cycle.png" alt="./assets/cycle.png" />
           <div class="dash-info">
             <p>Completed</p>
-            <span>{{ completedTodos?.length }} {{ todoList?.length > 1 ? 'tasks' : 'task' }}</span>
+            <span
+              >{{ completedTodos?.length }}
+              {{ completedTodos?.length > 1 ? 'tasks' : 'task' }}</span
+            >
           </div>
         </div>
       </div>
@@ -118,7 +121,12 @@ const deleteTodo = async (todo) => {
       <p class="subtitle">Recent Task:</p>
 
       <div class="todo-list-container">
-        <div class="todolist" v-for="(todo, index) in activeTodos" title="select to complete">
+        <div
+          class="todolist"
+          v-for="(todo, index) in activeTodos"
+          @click="moveToCompleted(todo)"
+          title="select to complete"
+        >
           <div class="todo-details">
             <span>Todo {{ index + 1 }}:</span> <br />{{ todo.text }}
           </div>
@@ -258,6 +266,9 @@ const deleteTodo = async (todo) => {
       .trash {
         color: #e92f2f;
         cursor: pointer;
+        position: absolute;
+        right: 20px;
+        z-index: 100;
 
         &:hover {
           transform: scale(1.3);
