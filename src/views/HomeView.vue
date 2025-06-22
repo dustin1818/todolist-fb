@@ -105,7 +105,7 @@ const deleteTodo = async (todo) => {
           </div>
         </div>
         <div class="dashboard two">
-          <img src="../assets/cycle.png" alt="./assets/cycle.png" />
+          <img src="../assets/checked.png" alt="./assets/cycle.png" />
           <div class="dash-info">
             <p>Completed</p>
             <span
@@ -126,6 +126,7 @@ const deleteTodo = async (todo) => {
           v-for="(todo, index) in activeTodos"
           @click="moveToCompleted(todo)"
           title="select to complete"
+          v-if="activeTodos.length > 0"
         >
           <div class="todo-details">
             <span>Todo {{ index + 1 }}:</span> <br />{{ todo.text }}
@@ -140,8 +141,13 @@ const deleteTodo = async (todo) => {
         </div>
       </div>
 
+      <p style="margin: 20px 0" v-if="activeTodos.length == 0">
+        There are no todos. Please add using the plus icon below.
+      </p>
+
       <p class="subtitle" style="margin-top: 50px">Completed Task:</p>
-      <div class="todo-list-container">
+
+      <div class="todo-list-container" v-if="completedTodos.length > 0">
         <div class="todolist" v-for="(todo, index) in completedTodos" title="completed todo">
           <div class="todo-details">
             <span>Todo {{ index + 1 }}:</span> <br />{{ todo.text }}
@@ -155,6 +161,10 @@ const deleteTodo = async (todo) => {
           />
         </div>
       </div>
+
+      <p style="margin: 20px 0" v-if="completedTodos.length == 0">
+        There are no completed todos. Please add using the plus icon below.
+      </p>
     </main>
 
     <div class="signout-btn" @click="logout">
@@ -187,6 +197,7 @@ const deleteTodo = async (todo) => {
   .dashboard-container {
     display: flex;
     gap: 12px;
+    margin: 30px 0;
 
     .dashboard {
       width: 60%;
