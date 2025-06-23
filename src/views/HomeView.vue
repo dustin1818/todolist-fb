@@ -1,41 +1,24 @@
 <script setup>
-import AddTodo from '@/components/AddTodo.vue'
-import { db } from '@/firebase'
-import { computed, onMounted, ref } from 'vue'
-import { collection, deleteDoc, doc, onSnapshot, updateDoc } from 'firebase/firestore'
-import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth'
-import router from '@/router'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faXmark, faTrash } from '@fortawesome/free-solid-svg-icons'
 import Footer from '@/components/Footer.vue'
+import Header from '@/components/Header.vue'
+import SideNav from '@/components/SideNav.vue'
+import { db } from '@/firebase'
+import { faTrash, faCheck } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import { collection, deleteDoc, doc, onSnapshot, updateDoc } from 'firebase/firestore'
+import { computed, onMounted, ref } from 'vue'
 
 const todoList = ref([])
 const activeTodos = computed(() => todoList.value.filter((todo) => !todo.completed))
 const completedTodos = computed(() => todoList.value.filter((todo) => todo.completed))
-const displayName = ref('')
-const auth = getAuth()
 
-const logout = () => {
-  if (confirm('Are you sure you want to logout?')) {
-    signOut(auth)
-      .then(() => {
-        alert('Logout successful!')
-        router.push('/login')
-      })
-      .catch((error) => {
-        console.error(error)
-      })
-  } else {
-    alert('Logout canceled.')
-  }
-}
+const auth = getAuth()
 
 onMounted(async () => {
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      displayName.value = user.displayName ?? user.email.split('@gmail.com')[0]
       const uid = user.uid
-
       const todosCol = collection(db, 'todos')
       const unsubscribe = onSnapshot(todosCol, (snapshot) => {
         const todos = []
@@ -75,26 +58,20 @@ const moveToCompleted = async (todo) => {
 }
 
 const deleteTodo = async (todo) => {
-  try {
+  const confirmed = confirm('Are you sure you want to delete todo?')
+
+  if (confirmed) {
     await deleteDoc(doc(db, 'todos', todo.id))
-    todoList.value = todoList.value.filter((t) => t.text !== todo.text)
-  } catch (error) {
-    console.error(error)
+    todoList.value = todoList.value.filter((t) => t.id !== todo.id)
+  } else {
+    alert('Delete todo has been canceled.')
   }
 }
 </script>
 
 <template>
   <div class="container">
-    <header class="header">
-      <div class="avatar-container">
-        <img src="https://getillustrations.b-cdn.net//photos/pack/3d-avatar-male_lg.png" alt="" />
-        <div class="avatar-details">
-          <h2>Hi, {{ displayName }} &#128075;</h2>
-          <p>Your daily adventure starts now</p>
-        </div>
-      </div>
-    </header>
+    <Header />
     <main>
       <div class="dashboard-container">
         <div class="dashboard">
@@ -116,15 +93,12 @@ const deleteTodo = async (todo) => {
         </div>
       </div>
 
-      <AddTodo />
-
       <p class="subtitle">Recent Task:</p>
 
       <div class="todo-list-container">
         <div
           class="todolist"
           v-for="(todo, index) in activeTodos"
-          @click="moveToCompleted(todo)"
           title="select to complete"
           v-if="activeTodos.length > 0"
         >
@@ -132,12 +106,20 @@ const deleteTodo = async (todo) => {
             <span>Todo {{ index + 1 }}:</span> <br />{{ todo.text }}
           </div>
 
-          <FontAwesomeIcon
-            @click="deleteTodo(todo)"
-            class="trash"
-            :icon="faTrash"
-            title="delete todo"
-          />
+          <div class="todo-icon-div">
+            <FontAwesomeIcon
+              @click="deleteTodo(todo)"
+              class="trash"
+              :icon="faTrash"
+              title="delete todo"
+            />
+            <FontAwesomeIcon
+              @click="moveToCompleted(todo)"
+              class="check"
+              :icon="faCheck"
+              title="Complete todo"
+            />
+          </div>
         </div>
       </div>
 
@@ -153,23 +135,23 @@ const deleteTodo = async (todo) => {
             <span>Todo {{ index + 1 }}:</span> <br />{{ todo.text }}
           </div>
 
-          <FontAwesomeIcon
-            class="trash"
-            :icon="faTrash"
-            @click="deleteTodo(todo)"
-            title="delete todo"
-          />
+          <div class="todo-icon-div">
+            <FontAwesomeIcon
+              @click="deleteTodo(todo)"
+              class="trash"
+              :icon="faTrash"
+              title="delete todo"
+            />
+          </div>
         </div>
       </div>
 
       <p style="margin: 20px 0" v-if="completedTodos.length == 0">
         There are no completed todos. Please add using the plus icon below.
       </p>
-    </main>
 
-    <div class="signout-btn" @click="logout">
-      <FontAwesomeIcon class="xmark" :icon="faXmark" />
-    </div>
+      <SideNav />
+    </main>
   </div>
 
   <Footer />
@@ -177,23 +159,6 @@ const deleteTodo = async (todo) => {
 
 <style lang="scss" scoped>
 .container {
-  padding: 20px;
-  max-width: 1240px;
-  margin: auto;
-
-  .avatar-container {
-    display: flex;
-    align-items: center;
-
-    img {
-      width: 80px;
-      height: 80px;
-      object-fit: cover;
-      border-radius: 100%;
-      margin-right: 20px;
-    }
-  }
-
   .dashboard-container {
     display: flex;
     gap: 12px;
@@ -287,6 +252,19 @@ const deleteTodo = async (todo) => {
         }
       }
 
+      .check {
+        color: #0aa06e;
+        cursor: pointer;
+        position: absolute;
+        right: 45px;
+        z-index: 100;
+
+        &:hover {
+          transform: scale(1.3);
+          transition: all 0.3s ease;
+        }
+      }
+
       &::after {
         position: absolute;
         content: '';
@@ -304,30 +282,6 @@ const deleteTodo = async (todo) => {
         transform: scale(1.0235);
         transition: all 0.3s ease;
       }
-    }
-  }
-
-  .signout-btn {
-    height: 45px;
-    width: 45px;
-    background-color: #e92f2f;
-    display: grid;
-    place-items: center;
-    border-radius: 100%;
-    position: absolute;
-    bottom: 85px;
-    right: 22px;
-    cursor: pointer;
-
-    &:hover {
-      transform: translateY(-20px);
-      transition: all 0.5s ease-in-out;
-    }
-
-    .xmark {
-      color: #ffffff;
-      background: transparent;
-      font-weight: 500;
     }
   }
 }

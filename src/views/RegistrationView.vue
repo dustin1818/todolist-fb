@@ -115,9 +115,6 @@ const loginWithGoogle = () => {
 
 <style lang="scss" scoped>
 .container {
-  padding: 20px;
-  max-width: 1240px;
-  margin: auto;
   height: 95vh;
 
   .title {
