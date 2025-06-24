@@ -43,7 +43,7 @@ const loginWithGoogle = () => {
       const token = credential.accessToken
       const user = result.user
       console.log(token, user)
-      router.push('/')
+      router.push('/home')
     })
     .catch((error) => {
       const errorCode = error.code
