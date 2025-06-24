@@ -30,11 +30,11 @@ const router = createRouter({
       component: WeatherView,
       meta: { requiresAuth: true },
     },
-    // {
-    //   path: '/:pathMatch(.*)*',
-    //   name: 'not-found',
-    //   redirect: '/login',
-    // },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'not-found',
+      redirect: '/login',
+    },
   ],
 })
 
