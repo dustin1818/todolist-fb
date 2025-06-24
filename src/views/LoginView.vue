@@ -20,6 +20,7 @@ const onSubmit = () => {
       const user = userCredential.user
       console.log('Successfully registered', user)
       alert('Login successful')
+      localStorage.setItem('user', JSON.stringify(user))
       router.push('/home')
     })
     .catch((error) => {
@@ -42,6 +43,7 @@ const loginWithGoogle = () => {
       const credential = GoogleAuthProvider.credentialFromResult(result)
       const token = credential.accessToken
       const user = result.user
+      localStorage.setItem('user', JSON.stringify(user))
       console.log(token, user)
       router.push('/home')
     })

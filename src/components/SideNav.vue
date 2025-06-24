@@ -12,6 +12,7 @@ const logout = () => {
     signOut(auth)
       .then(() => {
         alert('Logout successful!')
+        localStorage.removeItem('user')
         router.push('/login')
       })
       .catch((error) => {
@@ -33,13 +34,12 @@ const goNotesPage = () => {
 
 <template>
   <AddTodo />
+  <div class="notes-btn" @click="goNotesPage">
+    <FontAwesomeIcon class="note" :icon="faNoteSticky" />
+  </div>
 
   <div class="signout-btn" @click="logout">
     <FontAwesomeIcon class="xmark" :icon="faXmark" />
-  </div>
-
-  <div class="notes-btn" @click="goNotesPage">
-    <FontAwesomeIcon class="note" :icon="faNoteSticky" />
   </div>
 
   <div class="weather-btn" @click="goWeatherPage">

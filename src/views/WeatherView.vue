@@ -3,10 +3,12 @@ import Header from '@/components/Header.vue'
 import SideNav from '@/components/SideNav.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faCar, faCloudRain, faDroplet } from '@fortawesome/free-solid-svg-icons'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watchEffect } from 'vue'
 import axios from 'axios'
 
 const weatherValue = ref()
+const location = ref('makati')
+const country = ref('ph')
 
 const celsius = computed(() => {
   return (weatherValue.value?.main.temp - 273.15).toFixed(0)
@@ -19,12 +21,10 @@ const dateToday = computed(() => {
   return formattedDate
 })
 
-onMounted(async () => {
-  const location = 'makati'
-  const country = 'ph'
+watchEffect(async () => {
   const appId = 'c76dede2f64e7d13028ccbccd9f193e4'
   const weatherData = await axios.get(
-    `https://api.openweathermap.org/data/2.5/weather?q=${location},${country}&appid=${appId}`,
+    `https://api.openweathermap.org/data/2.5/weather?q=${location.value},${country.value}&appid=${appId}`,
   )
   weatherValue.value = weatherData.data
 })
@@ -34,8 +34,6 @@ onMounted(async () => {
   <div class="container">
     <Header />
   </div>
-
-  {{}}
 
   <div class="upper-container">
     <div class="upper-details">
@@ -72,10 +70,16 @@ onMounted(async () => {
     </div>
   </div>
 
+  <div class="input-container">
+    <label>Location:</label>
+    <br />
+    <input type="text" v-model="location" autocapitalize="words" />
+  </div>
+
   <SideNav />
 </template>
 
-<style>
+<style scoped>
 .upper-container {
   background: #17bbf3;
   padding: 40px;
@@ -151,6 +155,24 @@ onMounted(async () => {
         color: #fbfbfb;
       }
     }
+  }
+}
+
+.input-container {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  input {
+    width: 70%;
+    padding: 10px;
+    border-radius: 2px;
+    border: solid 1px #252424;
+    text-align: center;
+    outline: none;
+    text-transform: capitalize;
   }
 }
 </style>
