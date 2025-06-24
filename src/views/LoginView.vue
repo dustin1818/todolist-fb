@@ -2,7 +2,7 @@
 import Footer from '@/components/Footer.vue'
 import { reactive } from 'vue'
 import { getAuth, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth'
-import { GoogleAuthProvider } from 'firebase/auth'
+import { GoogleAuthProvider, GithubAuthProvider } from 'firebase/auth'
 import router from '@/router'
 
 const form = reactive({
@@ -12,9 +12,10 @@ const form = reactive({
 })
 
 const provider = new GoogleAuthProvider()
+const githubProvider = new GithubAuthProvider()
+const auth = getAuth()
 
 const onSubmit = () => {
-  const auth = getAuth()
   signInWithEmailAndPassword(auth, form.email, form.pass)
     .then((userCredential) => {
       const user = userCredential.user
@@ -37,7 +38,6 @@ const onSubmit = () => {
 }
 
 const loginWithGoogle = () => {
-  const auth = getAuth()
   signInWithPopup(auth, provider)
     .then((result) => {
       const credential = GoogleAuthProvider.credentialFromResult(result)
@@ -55,6 +55,25 @@ const loginWithGoogle = () => {
       console.error(errorCode)
       alert(errorMessage)
       console.error(email, credential)
+    })
+}
+
+const loginWithGithub = () => {
+  signInWithPopup(auth, githubProvider)
+    .then((result) => {
+      const credential = GithubAuthProvider.credentialFromResult(result)
+      const token = credential.accessToken
+      const user = result.user
+      localStorage.setItem('user', JSON.stringify(user))
+      console.log(token, user)
+      router.push('/home')
+    })
+    .catch((error) => {
+      const errorCode = error.code
+      const errorMessage = error.message
+      const email = error.customData.email
+      const credential = GithubAuthProvider.credentialFromError(error)
+      console.error(errorCode, errorMessage)
     })
 }
 </script>
@@ -96,8 +115,8 @@ const loginWithGoogle = () => {
       <div class="icon-wrapper" @click="loginWithGoogle()">
         <img src="../assets/search.png" alt="" />
       </div>
-      <div class="icon-wrapper">
-        <img src="../assets/facebook.png" alt="" />
+      <div class="icon-wrapper" @click="loginWithGithub()">
+        <img src="../assets/github-logo.png" alt="" />
       </div>
     </div>
 
