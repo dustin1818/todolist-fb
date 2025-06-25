@@ -165,6 +165,11 @@ watchEffect(async () => {
   justify-content: center;
   align-items: center;
 
+  @media screen and (max-width: 640px) {
+    padding: 20px 20px 40px 20px;
+    margin-top: 0;
+  }
+
   input {
     width: 70%;
     padding: 10px;

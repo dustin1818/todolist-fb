@@ -164,6 +164,12 @@ const deleteTodo = async (todo) => {
     gap: 12px;
     margin: 30px 0;
 
+    @media screen and (max-width: 640px) {
+      flex-direction: column;
+      gap: 0;
+      margin: 50px 0;
+    }
+
     .dashboard {
       width: 60%;
       padding: 20px;
@@ -174,6 +180,11 @@ const deleteTodo = async (todo) => {
       text-align: left;
       display: flex;
       align-items: center;
+
+      @media screen and (max-width: 640px) {
+        width: 90%;
+        margin: 0 auto 10px 0;
+      }
 
       img {
         background: transparent;
@@ -218,6 +229,10 @@ const deleteTodo = async (todo) => {
     color: #1f1f1f;
     font-weight: 600;
     margin-bottom: 8px;
+
+    @media screen and (max-width: 640px) {
+      margin-top: 50px;
+    }
   }
 
   .todo-list-container {
@@ -238,6 +253,10 @@ const deleteTodo = async (todo) => {
       min-height: 85px;
       font-size: 18px;
       cursor: pointer;
+
+      @media screen and (max-width: 640px) {
+        width: 90%;
+      }
 
       .trash {
         color: #e92f2f;

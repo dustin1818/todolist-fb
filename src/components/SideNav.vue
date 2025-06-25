@@ -60,6 +60,13 @@ const goNotesPage = () => {
   right: 22px;
   cursor: pointer;
 
+  @media screen and (max-width: 640px) {
+    height: 35px;
+    width: 35px;
+    bottom: 65px;
+    right: 10px;
+  }
+
   &:hover {
     transform: translateY(-20px);
     transition: all 0.5s ease-in-out;
@@ -84,6 +91,13 @@ const goNotesPage = () => {
   right: 22px;
   cursor: pointer;
 
+  @media screen and (max-width: 640px) {
+    height: 35px;
+    width: 35px;
+    bottom: 125px;
+    right: 10px;
+  }
+
   &:hover {
     transform: translateY(-20px);
     transition: all 0.5s ease-in-out;
@@ -107,6 +121,13 @@ const goNotesPage = () => {
   bottom: 225px;
   right: 22px;
   cursor: pointer;
+
+  @media screen and (max-width: 640px) {
+    height: 35px;
+    width: 35px;
+    bottom: 175px;
+    right: 10px;
+  }
 
   &:hover {
     transform: translateY(-20px);

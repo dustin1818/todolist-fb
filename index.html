@@ -10,5 +10,21 @@
   <body>
     <div id="app"></div>
     <script type="module" src="/src/main.js"></script>
+    <script type="module">
+      import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js'
+      import { getAnalytics } from 'https://www.gstatic.com/firebasejs/11.9.1/firebase-analytics.js'
+      const firebaseConfig = {
+        apiKey: 'AIzaSyDG9trUw6xuhN9c9qHIsN0whTLTbCyzpV8',
+        authDomain: 'todolist-2025-d2174.firebaseapp.com',
+        projectId: 'todolist-2025-d2174',
+        storageBucket: 'todolist-2025-d2174.firebasestorage.app',
+        messagingSenderId: '459434640050',
+        appId: '1:459434640050:web:e5bee6f29c18cd1af47fab',
+        measurementId: 'G-0RSXHF92EF',
+      }
+
+      const app = initializeApp(firebaseConfig)
+      const analytics = getAnalytics(app)
+    </script>
   </body>
 </html>

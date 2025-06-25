@@ -96,6 +96,13 @@ button {
   right: 20px;
   cursor: pointer;
 
+  @media screen and (max-width: 640px) {
+    height: 35px;
+    width: 35px;
+    bottom: 10px;
+    right: 10px;
+  }
+
   &:hover {
     transform: translateY(-20px);
     transition: all 0.5s ease-in-out;
